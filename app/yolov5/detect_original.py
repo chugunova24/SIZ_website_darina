@@ -31,6 +31,7 @@ from pathlib import Path
 
 import torch
 import torch.backends.cudnn as cudnn
+from .db_data import Data_db
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -51,6 +52,7 @@ def run(
         weights,  # model.pt path(s)
         source,  # file/dir/URL/glob, 0 for webcam
         view_img,
+        export_to_db,
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
@@ -85,11 +87,15 @@ def run(
         source = check_file(source)  # download
 
     # Directories
-    #save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
-    #print(str(save_dir))
-    #(save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
-    save_dir = "app\\static\\images"
-    print(save_dir)
+    # save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
+    # print(str(save_dir))
+    # (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
+    save_dir = "app/static/images"
+
+    # basedir = os.path.abspath(os.path.dirname(__file__))
+    # print(basedir)
+    # save_dir = os.path.join(basedir, 'image_result')
+    # print(save_dir)
 
     # Load model
     device = select_device(device)
@@ -144,14 +150,14 @@ def run(
                 p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
 
             p = Path(p)  # to Path
-            save_path = str(save_dir) + '\\' + p.name  # im.jpg
+            save_path = str(save_dir) + '/' + p.name  # im.jpg
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
-            detected_object=0
+            detected_object = 0
             if len(det):
-                detected_object=len(det)
+                detected_object = len(det)
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
 
@@ -198,15 +204,20 @@ def run(
 
         # Print time (inference-only)
         LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
-        time_to_detect=round(t3-t2,3)
-        
+        time_to_detect = round(t3 - t2, 3)
 
     # Print results
     t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
     LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
     if save_txt or save_img:
-        s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
+        s = f"\n{len(list(save_dir.glob('*.txt')))} labels saved to {save_dir / ''}" if save_txt else ''
+        # s =
         LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
+    if export_to_db:
+        db = Data_db()
+        db.insert_data(detected_object, time_to_detect, str(im_path))
+    else:
+        print("export_to_db == False")
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
     return (detected_object, time_to_detect, im_path)
@@ -249,6 +260,7 @@ def parse_opt():
 def main(opt):
     check_requirements(exclude=('tensorboard', 'thop'))
     run(**vars(opt))
+
 
 
 if __name__ == "__main__":
