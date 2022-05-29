@@ -1,9 +1,8 @@
- 
 version: "3.9"
 services:
   postgres:
     image: postgres:13.3
-    container_name: postgres_siz3
+    container_name: postgres_siz_db
     environment:
       POSTGRES_DB: "siz_db"
       POSTGRES_USER: "darina"
@@ -21,10 +20,10 @@ services:
 
   pgadmin:
     user: root
-    container_name: pgadmin_container3
+    container_name: pgadmin_admin
     image: dpage/pgadmin4:5.7
     environment:
-      PGADMIN_DEFAULT_EMAIL: "t.chugunova24@gmail.com"
+      PGADMIN_DEFAULT_EMAIL: "stepanovadari@mail.ru"
       PGADMIN_DEFAULT_PASSWORD: "123456"
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:

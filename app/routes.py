@@ -1,4 +1,5 @@
 import os
+import pathlib
 import uuid
 
 from app import app
@@ -21,8 +22,18 @@ def upload():
 
         f = request.files.get('file')
         f.save(os.path.join(app.config['UPLOADED_PATH'], f.filename))
+
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        print(basedir)
+        #path_to_pt=basedir+''
+        # Получаем строку, содержащую путь к рабочей директории:
+        dir_path = pathlib.Path.cwd()
+
+        # Объединяем полученную строку с недостающими частями пути
+        path = pathlib.Path(dir_path, 'app', 'best.pt')
+        print('ПУТЬ',path)
         # Thread(target=run, args=('nebest.pt', f.filename,True)).start()
-        detected_object = run("/home/chugun/Projects/SIZ_website-master/app/best.pt", f.filename, True, True)
+        detected_object = run(path, f.filename, True, True)
         last_image = f.filename
         # f = request.files.get('file')
         # file_ext = f.filename[f.filename.rfind('.'):]
