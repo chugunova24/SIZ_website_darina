@@ -17,4 +17,4 @@ $ docker stop имя_контейнера
 ```
 # Использование:
 ## Перейдите по ссылке http://127.0.0.1:8080/ .
-<img src="[https://github.com/DarinaStepanova/vvit/tree/master/src/1.jpg"](https://github.com/DarinaStepanova/vvit/blob/d29ece114487f9e443743d85136b79235977a61c/src/1.jpg)/>
+<img src="https://github.com/DarinaStepanova/vvit/tree/master/src/1.jpg"/>
