@@ -52,7 +52,7 @@ header .container-fluid
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;
-    padding-top: 20px;
+    padding-top: 20x;
 }
 body {
 	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);

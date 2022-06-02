@@ -218,9 +218,6 @@ def run(
         db.insert_data(detected_object, time_to_detect, str(im_path))
     else:
         print("export_to_db == False")
-    if update:
-        strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
-    return (detected_object, time_to_detect, im_path)
 
 
 def parse_opt():
