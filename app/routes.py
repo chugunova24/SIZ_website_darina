@@ -16,7 +16,7 @@ def upload():
     if request.method == 'POST':
         f = request.files.get('file') #получает файл
         f.save(os.path.join(app.config['UPLOADED_PATH'], f.filename)) #получаем полный путь до загруженного файла и сохраняем его по этому пути
-        run(app.config["WEIGHTS_PATH"], f.filename, Fals, True)#вызов запирающей функции детекции
+        run(app.config["WEIGHTS_PATH"], f.filename, False, True)#вызов запирающей функции детекции
         last_image = f.filename #Сохраняем имя последнего изображения
     return render_template('index.html') # если метод GET, то отрисовываем страницу index
 
