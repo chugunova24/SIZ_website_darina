@@ -1,11 +1,37 @@
+
+<!DOCTYPE html>
 <html>
     <head>
         <title> SHOW </title>
+        <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
     </head>
     <body>
         {% if show_img %}
             <img src="/static/images/{{image}}" align="middle" />
-<!--            <img src="/yolov5/image_result/{{image}}" align="middle" />-->
+
+         <video width="400" height="300" controls autoplay muted loop playsinline>
+           <source src="/static/images/{{image}}" type="video/webm">
+        </video>
         {% endif %}
+
+<!--        {% if last_video %}-->
+<!--        <video width="400" height="300" controls autoplay muted loop playsinline>-->
+<!--           <source src="/static/images/{{video}}" type="video/webm">-->
+<!--        </video>-->
+
+<!--        {% endif %}-->
+
+
+<!--    <video width="400" height="300" controls autoplay muted loop playsinline>-->
+<!--&lt;!&ndash;           <source src="video/duel.ogv" type='video/ogg; codecs="theora, vorbis"'>&ndash;&gt;-->
+<!--&lt;!&ndash;           <source src="/static/video/test1s.mp4" type="video/mp4">&ndash;&gt;-->
+<!--&lt;!&ndash;           <source src="/static/video/test1s.ogg" type="video/ogg">&ndash;&gt;-->
+<!--           <source src="/static/video/test1s.webm" type="video/webm">-->
+<!--&lt;!&ndash;        src="/static/video/test1s.mp4"&ndash;&gt;-->
+<!--&lt;!&ndash;           <source src="video/duel.webm" type='video/webm; codecs="vp8, vorbis"'>&ndash;&gt;-->
+<!--&lt;!&ndash;           Тег video не поддерживается вашим браузером.&ndash;&gt;-->
+<!--&lt;!&ndash;           <a href="video/duel.mp4">Скачайте видео</a>.&ndash;&gt;-->
+<!--        </video>-->
+
     </body>
 </html>
