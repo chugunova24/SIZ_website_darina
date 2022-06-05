@@ -47,6 +47,19 @@ from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
 
 
+# def get_resolution(file):
+#     vcap = cv2.VideoCapture(file)
+#     fps = 24
+#     width = 640
+#     height = 380
+#     if vcap.isOpened():
+#         width = int(vcap.get(cv2.CAP_PROP_FRAME_WIDTH))
+#         height = int(vcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+#         fps = float(int(vcap.get(cv2.CAP_PROP_FPS)))
+#         frames = int(vcap.get(cv2.CAP_PROP_FRAME_COUNT))
+#     vcap.release()
+#     return (fps, frames ,(width, height))
+
 @torch.no_grad()
 def run(
         weights,  # model.pt path(s)
@@ -86,6 +99,8 @@ def run(
     if is_url and is_file:
         source = check_file(source)  # download
 
+    # fps, frames, resolution = get_resolution(source)
+
     # Directories
     # save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
     # print(str(save_dir))
@@ -117,6 +132,7 @@ def run(
     # Run inference
     model.warmup(imgsz=(1 if pt else bs, 3, *imgsz))  # warmup
     dt, seen = [0.0, 0.0, 0.0], 0
+    frametime_total = 0.0
     for path, im, im0s, vid_cap, s in dataset:
         t1 = time_sync()
         im = torch.from_numpy(im).to(device)
@@ -206,6 +222,9 @@ def run(
         # Print time (inference-only)
         LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
         time_to_detect = round(t3 - t2, 3)
+
+    # frametime_total += time_to_detect
+    # time_per_frame = float(f"{frametime_total / frames:0.9f}")
 
     # Print results
     t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
